@@ -8,6 +8,7 @@ import com.ampta.resume_api.dto.AuthResponse;
 import com.ampta.resume_api.dto.RegisterRequest;
 import com.ampta.resume_api.service.AuthService;
 import com.ampta.resume_api.service.EmailService;
+import com.ampta.resume_api.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Value("${app.base.url:http://localhost:8080}")
     private String appBaseUrl;
@@ -77,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Please verify your email before loggin in.");
         }
 
-        String token = "jwtToken";
+        String token = jwtUtil.generateToken(existingUser.getId());
 
         AuthResponse response = toResponse(existingUser);
         response.setToken(token);

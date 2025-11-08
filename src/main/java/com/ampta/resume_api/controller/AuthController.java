@@ -62,4 +62,9 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/validate")
+    public String testValidationToken(){
+        return "Token validation is working";
+    }
 }

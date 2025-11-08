@@ -4,38 +4,45 @@ import com.ampta.resume_api.dto.AuthResponse;
 import com.ampta.resume_api.dto.RegisterRequest;
 import com.ampta.resume_api.service.AuthService;
 import com.ampta.resume_api.service.AuthServiceImpl;
+import com.ampta.resume_api.util.Endpoints;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static com.ampta.resume_api.util.Endpoints.*;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/auth")
+@RequestMapping(AUTH_CONTROLLER)
 public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping(REGISTER)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request){
-        try {
 
-            AuthResponse response = authService.register(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", e.getMessage()));
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "Server error", "error", e.getMessage()));
-        }
+        log.info("Register request received: {}", request);
+
+        AuthResponse response = authService.register(request);
+
+        log.info("Returning from Register controller Response: {}", response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+    }
+
+    @GetMapping(VERIFY_EMAIL)
+    public ResponseEntity<?> verifyEmail(@RequestParam String token){
+
+        log.info("Verify email request received: {}", token);
+
+        authService.verifyEmail(token);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Email verified successfully."));
     }
 }

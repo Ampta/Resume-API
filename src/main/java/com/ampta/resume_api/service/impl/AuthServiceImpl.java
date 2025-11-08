@@ -86,6 +86,28 @@ public class AuthServiceImpl implements AuthService {
         return response;
     }
 
+    @Override
+    public void resendVerification(String email) {
+        // step 1: Fetch the user account based on email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // step 2: Check the email is verified or not
+        if(user.getIsEmailVerified()){
+            throw new RuntimeException("Email is already verified");
+        }
+
+        // step 3: Set the new verification token and expires time
+        user.setVerificationToken(UUID.randomUUID().toString());
+        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+
+        // step 4: Update the new user values
+        userRepository.save(user);
+
+        // step 5: Resend the verification email
+        sendVerificationEmail(user);
+    }
+
     private void sendVerificationEmail(User newUser) {
         try{
             log.info("Dispatching verification email to userId={} email={}", newUser.getId(), newUser.getEmail());

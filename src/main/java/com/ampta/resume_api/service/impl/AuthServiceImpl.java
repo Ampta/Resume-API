@@ -108,6 +108,12 @@ public class AuthServiceImpl implements AuthService {
         sendVerificationEmail(user);
     }
 
+    @Override
+    public AuthResponse getProfile(Object principalObject) {
+        User existingUser = (User) principalObject;
+        return toResponse(existingUser);
+    }
+
     private void sendVerificationEmail(User newUser) {
         try{
             log.info("Dispatching verification email to userId={} email={}", newUser.getId(), newUser.getEmail());

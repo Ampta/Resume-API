@@ -12,4 +12,6 @@ public interface AuthService {
     AuthResponse login(LoginRequest request);
 
     void resendVerification(String email);
+
+    AuthResponse getProfile(Object principalObject);
 }

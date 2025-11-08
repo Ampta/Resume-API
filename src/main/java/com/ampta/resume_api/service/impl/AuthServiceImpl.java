@@ -1,10 +1,12 @@
-package com.ampta.resume_api.service;
+package com.ampta.resume_api.service.impl;
 
 import com.ampta.resume_api.document.User;
 import com.ampta.resume_api.exception.ResourceExistsException;
 import com.ampta.resume_api.repository.UserRepository;
 import com.ampta.resume_api.dto.AuthResponse;
 import com.ampta.resume_api.dto.RegisterRequest;
+import com.ampta.resume_api.service.AuthService;
+import com.ampta.resume_api.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +18,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;

@@ -1,5 +1,6 @@
-package com.ampta.resume_api.service;
+package com.ampta.resume_api.service.impl;
 
+import com.ampta.resume_api.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

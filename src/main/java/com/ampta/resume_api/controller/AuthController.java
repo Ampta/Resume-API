@@ -1,6 +1,7 @@
 package com.ampta.resume_api.controller;
 
 import com.ampta.resume_api.dto.AuthResponse;
+import com.ampta.resume_api.dto.LoginRequest;
 import com.ampta.resume_api.dto.RegisterRequest;
 import com.ampta.resume_api.service.AuthService;
 import com.ampta.resume_api.service.FileUploadService;
@@ -53,6 +54,12 @@ public class AuthController {
         log.info("Upload image request received");
 
         Map<String, String> response = fileUploadService.uploadSingleImage(file);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+        AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
 }

@@ -1,6 +1,7 @@
 package com.ampta.resume_api.service.impl;
 
 import com.ampta.resume_api.document.User;
+import com.ampta.resume_api.dto.LoginRequest;
 import com.ampta.resume_api.exception.ResourceExistsException;
 import com.ampta.resume_api.repository.UserRepository;
 import com.ampta.resume_api.dto.AuthResponse;
@@ -10,6 +11,8 @@ import com.ampta.resume_api.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${app.base.url:http://localhost:8080}")
     private String appBaseUrl;
@@ -52,11 +56,32 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Verification token has expired. Please request new one.");
         }
 
-        user.setEmailVerified(true);
+        user.setIsEmailVerified(true);
         user.setVerificationToken(null);
         user.setVerificationExpires(null);
         userRepository.save(user);
         log.info("Email verification SUCCESS userId={} email={}", user.getId(), user.getEmail());
+    }
+
+    @Override
+    public AuthResponse login(LoginRequest request) {
+        log.info("Inside AuthService: login() {}", request);
+        User existingUser = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
+
+        if(!passwordEncoder.matches(request.getPassword(), existingUser.getPassword())){
+            throw new UsernameNotFoundException("Invalid email or password");
+        }
+
+        if(!existingUser.getIsEmailVerified()){
+            throw new RuntimeException("Please verify your email before loggin in.");
+        }
+
+        String token = "jwtToken";
+
+        AuthResponse response = toResponse(existingUser);
+        response.setToken(token);
+        return response;
     }
 
     private void sendVerificationEmail(User newUser) {
@@ -132,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
                 .name(newUser.getName())
                 .email(newUser.getEmail())
                 .profileImageUrl(newUser.getProfileImageUrl())
-                .emailVerified(newUser.getEmailVerified())
+                .emailVerified(newUser.getIsEmailVerified())
                 .subscriptionPlan(newUser.getSubscriptionPlan())
                 .createdAt(newUser.getCreatedAt())
                 .updatedAt(newUser.getUpdatedAt())
@@ -143,10 +168,10 @@ public class AuthServiceImpl implements AuthService {
         return User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .profileImageUrl(request.getProfileImageUrl())
                 .subscriptionPlan("Basic")
-                .emailVerified(false)
+                .isEmailVerified(false)
                 .verificationToken(UUID.randomUUID().toString())
                 .verificationExpires(LocalDateTime.now().plusHours(24))
                 .build();

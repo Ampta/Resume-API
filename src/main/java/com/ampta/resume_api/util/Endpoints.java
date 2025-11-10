@@ -19,10 +19,11 @@ public class Endpoints {
     // Template endpoints
     public static final String TEMPLATE_CONTROLLER = "/api/templates";
 
-
     // Types of subscription
     public static final String PREMIUM = "premium";
 
+    // Payment endpoints
+    public static final String PAYMENT_CONTROLLER = "/api/payments";
 
     private Endpoints() {}
 }

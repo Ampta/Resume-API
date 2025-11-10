@@ -16,6 +16,13 @@ public class Endpoints {
     public static final String ID = "/{id}";
     public static final String UPLOAD_IMAGES = "/{id}/upload-images";
 
+    // Template endpoints
+    public static final String TEMPLATE_CONTROLLER = "/api/templates";
+
+
+    // Types of subscription
+    public static final String PREMIUM = "premium";
+
 
     private Endpoints() {}
 }

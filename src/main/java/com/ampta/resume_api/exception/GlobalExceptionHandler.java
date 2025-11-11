@@ -1,5 +1,6 @@
 package com.ampta.resume_api.exception;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.mapping.FieldName;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
+@Hidden
 public class GlobalExceptionHandler {
 
 
@@ -37,14 +39,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler(ResourceExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleResourceExistsException(ResourceExistsException ex){
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleResourceExistsException(ResourceNotFoundException ex){
         log.info("Inside GlobalExceptionHandler -handleResourceExistsException()");
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Resource exists");
         response.put("errors", ex.getMessage());
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(Exception.class)

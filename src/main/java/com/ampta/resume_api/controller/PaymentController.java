@@ -23,7 +23,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/create-order")
+    @PostMapping(CREATE_ORDER)
     public ResponseEntity<?> createOrder(@RequestBody Map<String, String> request,
                                          Authentication authentication) throws RazorpayException {
         // step 0: Validate the request
@@ -49,7 +49,7 @@ public class PaymentController {
 
     }
 
-    @PostMapping("/verify")
+    @PostMapping(VERIFY)
     public ResponseEntity<?> verifyPayment(@RequestBody Map<String, String> request) throws RazorpayException {
         // step 1: Validate the request
         String orderId = request.get("order_id");
@@ -74,7 +74,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/history")
+    @GetMapping(HISTORY)
     public ResponseEntity<?> getPaymentHistory(Authentication authentication){
 
         // step 1: Call the service method
@@ -85,7 +85,7 @@ public class PaymentController {
 
     }
 
-    @GetMapping("/order/{orderId}")
+    @GetMapping(ORDER_ID)
     public ResponseEntity<?> getOrderDetails(@PathVariable String orderId){
 
         // step 1: Call the service method

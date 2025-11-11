@@ -2,7 +2,7 @@ package com.ampta.resume_api.service.impl;
 
 import com.ampta.resume_api.document.User;
 import com.ampta.resume_api.dto.LoginRequest;
-import com.ampta.resume_api.exception.ResourceExistsException;
+import com.ampta.resume_api.exception.ResourceNotFoundException;
 import com.ampta.resume_api.repository.UserRepository;
 import com.ampta.resume_api.dto.AuthResponse;
 import com.ampta.resume_api.dto.RegisterRequest;
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest request){
         log.info("Inside AuthService: register() {}", request);
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new ResourceExistsException("User already exists with this email");
+            throw new ResourceNotFoundException("User already exists with this email");
         }
 
         User newUser = toDocument(request);

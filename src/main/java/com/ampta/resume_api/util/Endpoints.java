@@ -24,6 +24,13 @@ public class Endpoints {
 
     // Payment endpoints
     public static final String PAYMENT_CONTROLLER = "/api/payments";
+    public static final String CREATE_ORDER = "/create-order";
+    public static final String VERIFY = "/verify";
+    public static final String HISTORY = "/history";
+    public static final String ORDER_ID= "/order/{orderId}";
+
+    // Email endpoints
+    public static final String EMAIL_CONTROLLER = "/api/email";
 
     private Endpoints() {}
 }

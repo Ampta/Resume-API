@@ -19,7 +19,7 @@ import javax.swing.plaf.TableUI;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${spring.mail.properties.mail..smtp.from}")
+    @Value("${spring.mail.properties.mail.smtp.from}")
     private String fromEmail;
 
     private final JavaMailSender mailSender;

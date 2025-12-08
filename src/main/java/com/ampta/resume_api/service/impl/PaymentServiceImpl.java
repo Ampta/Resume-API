@@ -58,16 +58,16 @@ public class PaymentServiceImpl implements PaymentService {
         orderRequest.put("receipt", receipt);
 
         // step 3: Call the razorpay API to create order
-        Order order = razorpayClient.orders.create(orderRequest);
+        Order razorpayOrder = razorpayClient.orders.create(orderRequest);
 
         // step 4: Save the order details
         Payment newPayment = Payment.builder()
                 .userId(authUser.getId())
-                .orderId(order.get("id"))
+                .razorpayOrderId(razorpayOrder.get("id"))
                 .amount(amount)
                 .currency(currency)
                 .planType(planType)
-                .status("CREATED")
+                .status("created")
                 .receipt(receipt)
                 .build();
 
@@ -77,21 +77,21 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean verifyPayment(String orderId, String paymentId, String signature) throws RazorpayException {
+    public boolean verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorPaySignature) throws RazorpayException {
         try{
             JSONObject attributes = new JSONObject();
-            attributes.put("order_id", orderId);
-            attributes.put("payment_id", paymentId);
-            attributes.put("signature", signature);
+            attributes.put("razorpay_order_id", razorpayOrderId);
+            attributes.put("razorpay_payment_id", razorpayPaymentId);
+            attributes.put("razorpay_signature", razorPaySignature);
 
             boolean isValidSignature = Utils.verifyPaymentSignature(attributes, razorpayKeySecret);
 
             if(isValidSignature){
-                Payment payment = paymentRepository.findByOrderId(orderId)
+                Payment payment = paymentRepository.findByRazorpayOrderId(razorpayOrderId)
                         .orElseThrow(() -> new RuntimeException("Payment not found"));
 
-                payment.setPaymentId(paymentId);
-                payment.setSignature(signature);
+                payment.setRazorpayPaymentId(razorpayPaymentId);
+                payment.setRazorpaySignature(razorPaySignature);
                 payment.setStatus("paid");
                 paymentRepository.save(payment);
 
@@ -99,7 +99,6 @@ public class PaymentServiceImpl implements PaymentService {
                 upgradeUserSubscription(payment.getUserId(), payment.getPlanType());
                 return true;
             }
-
             return false;
 
         } catch (Exception e) {
@@ -122,12 +121,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment getPaymentDetails(String orderId) {
         // step 1: Call the repository finder method
-        return paymentRepository.findByOrderId(orderId)
+        return paymentRepository.findByRazorpayOrderId(orderId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
 
     }
 
     private void upgradeUserSubscription(String userId, String planType) {
+
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 

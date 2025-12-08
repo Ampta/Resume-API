@@ -18,16 +18,14 @@ import java.util.Map;
 @Hidden
 public class GlobalExceptionHandler {
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(
-            MethodArgumentNotValidException ex
-    ){
+            MethodArgumentNotValidException ex) {
         log.info("Inside GlobalExceptionHandler -handleValidationException()");
 
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError)error).getField();
+            String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
@@ -40,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleResourceExistsException(ResourceNotFoundException ex){
+    public ResponseEntity<Map<String, Object>> handleResourceExistsException(ResourceNotFoundException ex) {
         log.info("Inside GlobalExceptionHandler -handleResourceExistsException()");
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Resource exists");
@@ -50,8 +48,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex){
-        log.info("Inside GlobalExceptionHandler -handleGenericException()");
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        log.error("Inside GlobalExceptionHandler -handleGenericException()", ex);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Something went wrong. Contact administrator");
         response.put("errors", ex.getMessage());

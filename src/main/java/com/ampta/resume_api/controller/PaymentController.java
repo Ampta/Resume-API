@@ -38,7 +38,7 @@ public class PaymentController {
 
         // step 2: Prepare the response object
         Map<String, Object> response = Map.of(
-                "orderId", payment.getOrderId(),
+                "orderId", payment.getRazorpayOrderId(),
                 "amount", payment.getAmount(),
                 "currency", payment.getCurrency(),
                 "receipt", payment.getReceipt()
@@ -52,16 +52,16 @@ public class PaymentController {
     @PostMapping(VERIFY)
     public ResponseEntity<?> verifyPayment(@RequestBody Map<String, String> request) throws RazorpayException {
         // step 1: Validate the request
-        String orderId = request.get("order_id");
-        String paymentId = request.get("payment_id");
-        String signature = request.get("signature");
+        String razorpayOrderId = request.get("razorpay_order_id");
+        String razorpayPaymentId = request.get("razorpay_payment_id");
+        String razorpaySignature = request.get("razorpay_signature");
 
-        if(Objects.isNull(orderId) || Objects.isNull(paymentId) || Objects.isNull(signature)){
+        if(Objects.isNull(razorpayOrderId) || Objects.isNull(razorpayPaymentId) || Objects.isNull(razorpaySignature)){
             return ResponseEntity.badRequest().body(Map.of("message", "Missing required payment parameters"));
         }
 
         // step 2: Call the service method to verify the payment
-        boolean isValid =  paymentService.verifyPayment(orderId, paymentId, signature);
+        boolean isValid =  paymentService.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature);
 
         // step 3: Return the response
         if(isValid){

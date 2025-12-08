@@ -22,9 +22,9 @@ public class Payment {
     private String id;
 
     private String userId;
-    private String orderId;
-    private String paymentId;
-    private String signature;
+    private String razorpayOrderId;
+    private String razorpayPaymentId;
+    private String razorpaySignature;
 
     private Integer amount;
     private String currency;

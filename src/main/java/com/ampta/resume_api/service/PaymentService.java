@@ -12,7 +12,7 @@ import java.util.List;
 public interface PaymentService {
     Payment createOrder(Object principal, String planType) throws RazorpayException;
 
-    boolean verifyPayment(String orderId, String paymentId, String signature) throws RazorpayException;
+    boolean verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorPaySignature) throws RazorpayException;
 
     List<Payment> getUserPayments(Object principal);
 

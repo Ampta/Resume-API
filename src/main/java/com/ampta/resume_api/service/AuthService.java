@@ -14,4 +14,6 @@ public interface AuthService {
     void resendVerification(String email);
 
     AuthResponse getProfile(Object principalObject);
+
+    AuthResponse updateProfile(Object principalObject, com.ampta.resume_api.dto.UpdateProfileRequest request);
 }

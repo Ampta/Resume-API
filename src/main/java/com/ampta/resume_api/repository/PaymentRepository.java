@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, String> {
 
-    Optional<Payment> findByOrderId(String orderId);
+    Optional<Payment> findByRazorpayOrderId(String razorpayOrderId);
 
-    Optional<Payment> findByPaymentId(String paymentId);
+    Optional<Payment> findByRazorpayPaymentId(String razorpayPaymentId);
 
     List<Payment> findByUserIdOrderByCreatedAtDesc(String userId);
 

@@ -6,6 +6,16 @@ This guide is designed to help you set up and run the project easily, even if yo
 
 ---
 
+## Website Images
+
+<img width="1162" height="869" alt="resume_login_page" src="https://github.com/user-attachments/assets/4dc8d8c2-c7f9-4de4-9121-cfc6108cf693" />
+<img width="1607" height="869" alt="localhost_5173_dashboard" src="https://github.com/user-attachments/assets/3afdc3ca-4b14-4986-86a4-7bbeab79b517" />
+<img width="1607" height="869" alt="localhost_5173_templates" src="https://github.com/user-attachments/assets/7ebd9980-d33e-4a8d-bca9-e157f3d035d8" />
+<img width="1607" height="869" alt="localhost_5173_editor" src="https://github.com/user-attachments/assets/e817c434-ad75-4d1f-91c5-a1e2496d0705" />
+<img width="1607" height="869" alt="local_choose_templates" src="https://github.com/user-attachments/assets/d0c34a73-20b0-47f7-b389-94790b003856" />
+<img width="1607" height="869" alt="send_resume" src="https://github.com/user-attachments/assets/cd7590a9-9c2d-41c6-bd31-1c0ec1a494ad" />
+
+
 ## 🏗️ Tech Stack
 
 This project is built using modern, industry-standard technologies:
